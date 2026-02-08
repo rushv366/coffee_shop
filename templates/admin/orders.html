@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Orders - Coffee Shop{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+    <div class="dashboard-header">
+        <h1>All Orders</h1>
+    </div>
+
+    {% if orders %}
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Customer</th>
+                    <th>Email</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td>#{{ order[0] }}</td>
+                    <td>{{ order[5] }} {{ order[6] }}</td>
+                    <td>{{ order[7] }}</td>
+                    <td>${{ "%.2f"|format(order[2]) }}</td>
+                    <td>
+                        <span class="status-badge status-{{ order[3] }}">
+                            {{ order[3]|title }}
+                        </span>
+                    </td>
+                    <td>{{ order[4] }}</td>
+                    <td>
+                        <a href="{{ url_for('admin_order_details', order_id=order[0]) }}" 
+                           class="btn-action btn-view">
+                            View Details
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p>No orders found.</p>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Add Coffee - Coffee Shop{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+    <div class="dashboard-header">
+        <h1>Add New Coffee</h1>
+        <a href="{{ url_for('admin_coffees') }}" class="btn-primary">
+            <i class="fas fa-arrow-left"></i> Back to Coffees
+        </a>
+    </div>
+
+    <div class="auth-container">
+        <form method="POST" action="{{ url_for('add_coffee') }}" novalidate>
+            <div class="form-group">
+                <label for="name">Coffee Name</label>
+                <input type="text" id="name" name="name" class="form-control" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea id="description" name="description" class="form-control" rows="3" required></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="price">Price ($)</label>
+                <input type="number" id="price" name="price" class="form-control" step="0.01" min="0" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="category">Category</label>
+                <select id="category" name="category" class="form-control" required>
+                    <option value="">Select Category</option>
+                    <option value="Hot">Hot Coffee</option>
+                    <option value="Cold">Cold Coffee</option>
+                    <option value="Special">Special Coffee</option>
+                    <option value="Espresso">Espresso</option>
+                    <option value="Latte">Latte</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" name="is_available" checked>
+                    Available for order
+                </label>
+            </div>
+            
+            <button type="submit" class="btn-submit">Add Coffee</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

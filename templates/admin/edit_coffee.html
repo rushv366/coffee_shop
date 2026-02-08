@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Coffee - Coffee Shop{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+    <div class="dashboard-header">
+        <h1>Edit Coffee</h1>
+        <a href="{{ url_for('admin_coffees') }}" class="btn-primary">
+            <i class="fas fa-arrow-left"></i> Back to Coffees
+        </a>
+    </div>
+
+    <div class="auth-container">
+        <form method="POST" action="{{ url_for('edit_coffee', coffee_id=coffee.id) }}" novalidate>
+            <div class="form-group">
+                <label for="name">Coffee Name</label>
+                <input type="text" id="name" name="name" class="form-control" 
+                       value="{{ coffee.name }}" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea id="description" name="description" class="form-control" rows="3" required>{{ coffee.description }}</textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="price">Price ($)</label>
+                <input type="number" id="price" name="price" class="form-control" 
+                       value="{{ coffee.price }}" step="0.01" min="0" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="category">Category</label>
+                <select id="category" name="category" class="form-control" required>
+                    <option value="Hot" {% if coffee.category == 'Hot' %}selected{% endif %}>Hot Coffee</option>
+                    <option value="Cold" {% if coffee.category == 'Cold' %}selected{% endif %}>Cold Coffee</option>
+                    <option value="Special" {% if coffee.category == 'Special' %}selected{% endif %}>Special Coffee</option>
+                    <option value="Espresso" {% if coffee.category == 'Espresso' %}selected{% endif %}>Espresso</option>
+                    <option value="Latte" {% if coffee.category == 'Latte' %}selected{% endif %}>Latte</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" name="is_available" {% if coffee.is_available %}checked{% endif %}>
+                    Available for order
+                </label>
+            </div>
+            
+            <button type="submit" class="btn-submit">Update Coffee</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

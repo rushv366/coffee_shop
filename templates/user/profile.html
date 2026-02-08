@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}My Profile - Coffee Shop{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+    <div class="dashboard-header">
+        <h1>My Profile</h1>
+    </div>
+
+    <div class="profile-container">
+        <div class="profile-info">
+            <div class="profile-header">
+                <div class="avatar">
+                    <i class="fas fa-user-circle fa-4x"></i>
+                </div>
+                <div class="profile-details">
+                    <h2>{{ user.first_name }} {{ user.last_name }}</h2>
+                    <p>{{ user.email }}</p>
+                    <p>{{ user.contact_number }}</p>
+                    <p>Member since: {{ user.created_at }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="profile-form">
+            <h2>Update Profile</h2>
+            <form method="POST" action="{{ url_for('user_profile') }}" novalidate>
+                <div class="form-group">
+                    <label for="first_name">First Name</label>
+                    <input type="text" id="first_name" name="first_name" 
+                           class="form-control" value="{{ user.first_name }}" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="last_name">Last Name</label>
+                    <input type="text" id="last_name" name="last_name" 
+                           class="form-control" value="{{ user.last_name }}" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" 
+                           class="form-control" value="{{ user.email }}" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="contact_number">Contact Number</label>
+                    <input type="tel" id="contact_number" name="contact_number" 
+                           class="form-control" value="{{ user.contact_number }}" required>
+                </div>
+                
+                <button type="submit" class="btn-submit">Update Profile</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

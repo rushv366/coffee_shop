@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coffee Shop | Home</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #F8F5F0;
+            color: #3E2723;
+            line-height: 1.6;
+            font-size: 16px; /* Base font size */
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navigation */
+        .navbar {
+            background-color: #6F4E37;
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            font-size: 28px;
+            color: #C9A769;
+            margin-right: 10px;
+        }
+
+        .logo-text {
+            font-family: 'Dancing Script', cursive;
+            font-size: 28px;
+            color: white;
+            font-weight: 700;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background-color: rgba(255,255,255,0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            background-color: #C9A769;
+            color: #3E2723;
+            padding: 10px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            background-color: #D4B483;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 100px 0;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(111,78,55,0.9), rgba(201,169,105,0.8)),
+                        url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            border-radius: 0 0 20px 20px;
+            margin-bottom: 60px;
+        }
+
+        .hero h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 64px;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero p {
+            font-size: 18px;
+            max-width: 600px;
+            margin: 0 auto 30px;
+            line-height: 1.8;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 60px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 36px;
+            color: #6F4E37;
+            margin-bottom: 50px;
+            font-weight: 600;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .feature-icon {
+            font-size: 48px;
+            color: #6F4E37;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            font-size: 22px;
+            color: #3E2723;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .feature-card p {
+            font-size: 16px;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Coffee Menu Preview */
+        .menu-preview {
+            padding: 60px 0;
+            background-color: #FFF;
+            border-radius: 20px;
+            margin: 60px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .coffee-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .coffee-card {
+            background: #F8F5F0;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .coffee-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .coffee-image {
+            height: 180px;
+            background: linear-gradient(45deg, #6F4E37, #C9A769);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 48px;
+        }
+
+        .coffee-content {
+            padding: 20px;
+        }
+
+        .coffee-content h4 {
+            font-size: 18px;
+            color: #3E2723;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .coffee-price {
+            font-size: 20px;
+            color: #C9A769;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: #3E2723;
+            color: white;
+            padding: 60px 0 20px;
+            margin-top: 80px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h3 {
+            font-size: 22px;
+            color: #C9A769;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .footer-section p {
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: #E6CCB2;
+        }
+
+        .footer-section a {
+            color: #E6CCB2;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: #C9A769;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 14px;
+            color: #C9A769;
+        }
+
+        /* Flash Messages */
+        .flash-messages {
+            position: fixed;
+            top: 90px;
+            right: 20px;
+            z-index: 1000;
+            max-width: 400px;
+        }
+
+        .flash {
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            color: white;
+            font-size: 14px;
+            animation: slideIn 0.3s ease-out;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .flash.success {
+            background-color: #4CAF50;
+        }
+
+        .flash.error {
+            background-color: #f44336;
+        }
+
+        .flash.info {
+            background-color: #2196F3;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 48px;
+            }
+
+            .section-title {
+                font-size: 28px;
+            }
+
+            .nav-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .feature-card, .coffee-card {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .hero p {
+                font-size: 16px;
+            }
+
+            .btn-primary {
+                padding: 12px 25px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <a href="/" class="logo">
+                    <div class="logo-icon">☕</div>
+                    <div class="logo-text">Coffee Shop</div>
+                </a>
+                
+                <div class="nav-links">
+                    {% if session.user_id %}
+                        {% if session.is_admin %}
+                            <a href="/admin" class="nav-link">Admin Dashboard</a>
+                            <a href="/admin/coffees" class="nav-link">Manage Coffees</a>
+                        {% else %}
+                            <a href="/menu" class="nav-link">Menu</a>
+                            <a href="/orders" class="nav-link">My Orders</a>
+                            <a href="/profile" class="nav-link">Profile</a>
+                        {% endif %}
+                        <a href="/logout" class="btn-primary">Logout</a>
+                    {% else %}
+                        <a href="/" class="nav-link">Home</a>
+                        <a href="/about" class="nav-link">About</a>
+                        <a href="/menu" class="nav-link">Menu</a>
+                        <a href="/login" class="nav-link">Login</a>
+                        <a href="/register" class="btn-primary">Register</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Welcome to Coffee Shop</h1>
+            <p>Experience the art of perfect coffee. Freshly roasted beans, expertly brewed, delivered with passion. Your daily dose of happiness in a cup.</p>
+            
+            {% if not session.user_id %}
+                <a href="/register" class="btn-primary">Get Started</a>
+            {% else %}
+                {% if session.is_admin %}
+                    <a href="/admin" class="btn-primary">Go to Dashboard</a>
+                {% else %}
+                    <a href="/menu" class="btn-primary">Order Now</a>
+                {% endif %}
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="container">
+        <div class="features">
+            <h2 class="section-title">Why Choose Us</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">☕</div>
+                    <h3>Premium Quality</h3>
+                    <p>We source only the finest coffee beans from sustainable farms around the world.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Fast Delivery</h3>
+                    <p>Get your favorite coffee delivered hot and fresh right to your doorstep.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">💚</div>
+                    <h3>Eco-Friendly</h3>
+                    <p>We use biodegradable packaging and support environmental initiatives.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Coffee Menu Preview -->
+    <section class="container">
+        <div class="menu-preview">
+            <h2 class="section-title">Our Popular Coffees</h2>
+            <div class="coffee-grid">
+                <div class="coffee-card">
+                    <div class="coffee-image">☕</div>
+                    <div class="coffee-content">
+                        <h4>Espresso</h4>
+                        <p>Strong and concentrated coffee</p>
+                        <div class="coffee-price">$3.50</div>
+                    </div>
+                </div>
+                
+                <div class="coffee-card">
+                    <div class="coffee-image">🥛</div>
+                    <div class="coffee-content">
+                        <h4>Cappuccino</h4>
+                        <p>Espresso with steamed milk foam</p>
+                        <div class="coffee-price">$4.50</div>
+                    </div>
+                </div>
+                
+                <div class="coffee-card">
+                    <div class="coffee-image">🍫</div>
+                    <div class="coffee-content">
+                        <h4>Mocha</h4>
+                        <p>Chocolate-flavored latte</p>
+                        <div class="coffee-price">$5.00</div>
+                    </div>
+                </div>
+                
+                <div class="coffee-card">
+                    <div class="coffee-image">❄️</div>
+                    <div class="coffee-content">
+                        <h4>Iced Coffee</h4>
+                        <p>Chilled coffee with ice</p>
+                        <div class="coffee-price">$4.00</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 40px;">
+                <a href="/menu" class="btn-primary" style="font-size: 18px; padding: 15px 40px;">
+                    View Full Menu
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Coffee Shop</h3>
+                    <p>Brewing happiness one cup at a time since 2024. We're passionate about bringing you the best coffee experience.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <p>📍 123 Coffee Street, City</p>
+                    <p>📞 +1 (555) 123-4567</p>
+                    <p>✉️ info@coffeeshop.com</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Hours</h3>
+                    <p>Monday - Friday: 7am - 9pm</p>
+                    <p>Saturday - Sunday: 8am - 10pm</p>
+                    <p>Holidays: 9am - 6pm</p>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 Coffee Shop. All rights reserved. | Designed with ❤️ for coffee lovers</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

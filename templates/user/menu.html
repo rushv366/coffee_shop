@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}Menu - Coffee Shop{% endblock %}
+
+{% block content %}
+<div class="dashboard-header">
+    <h1>Our Coffee Menu</h1>
+    <a href="{{ url_for('user_cart') }}" class="btn-primary">
+        <i class="fas fa-shopping-cart"></i> View Cart
+        {% if cart %}
+            <span>({{ cart.values()|sum }})</span>
+        {% endif %}
+    </a>
+</div>
+
+{% for category, coffees in coffee_by_category.items() %}
+<div class="menu-category">
+    <h2>{{ category }} Coffees</h2>
+    
+    <div class="coffee-grid">
+        {% for coffee in coffees %}
+        <div class="coffee-card">
+            <div class="coffee-image">
+                <i class="fas fa-coffee"></i>
+            </div>
+            <div class="coffee-content">
+                <h3>{{ coffee.name }}</h3>
+                <span class="coffee-category">{{ coffee.category }}</span>
+                <p>{{ coffee.description }}</p>
+                <div class="coffee-price">${{ "%.2f"|format(coffee.price) }}</div>
+                
+                <div class="coffee-actions">
+                    <button class="add-to-cart" data-coffee-id="{{ coffee.id }}">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endfor %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Add to cart functionality
+    document.querySelectorAll('.add-to-cart').forEach(button => {
+        button.addEventListener('click', function() {
+            const coffeeId = this.dataset.coffeeId;
+            
+            // Show loading state
+            const originalText = this.innerHTML;
+            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Adding...';
+            this.disabled = true;
+            
+            // Add to cart via API
+            fetch('/api/cart/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    coffee_id: coffeeId,
+                    quantity: 1
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update cart count
+                    const cartCount = document.querySelector('.cart-count');
+                    if (cartCount) {
+                        cartCount.textContent = data.cart_count;
+                    }
+                    
+                    // Show success message
+                    showNotification(data.message, 'success');
+                }
+            })
+            .catch(error => {
+                showNotification('Failed to add item to cart', 'error');
+            })
+            .finally(() => {
+                // Restore button state
+                this.innerHTML = originalText;
+                this.disabled = false;
+            });
+        });
+    });
+</script>
+{% endblock %}

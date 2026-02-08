@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Coffee Shop{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="{{ url_for('index') }}" class="logo">
+                <i class="fas fa-coffee"></i>
+                <span>Coffee Shop</span>
+            </a>
+            
+            <div class="nav-links">
+                {% if session.user_id %}
+                    {% if session.is_admin %}
+                        <a href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+                        <a href="{{ url_for('admin_coffees') }}">Coffees</a>
+                        <a href="{{ url_for('admin_orders') }}">Orders</a>
+                    {% else %}
+                        <a href="{{ url_for('user_dashboard') }}">Home</a>
+                        <a href="{{ url_for('user_menu') }}">Menu</a>
+                        <a href="{{ url_for('user_cart') }}">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span class="cart-count">
+                                {% if session.cart %}
+                                    {{ session.cart.values()|sum }}
+                                {% else %}
+                                    0
+                                {% endif %}
+                            </span>
+                        </a>
+                        <a href="{{ url_for('user_orders') }}">My Orders</a>
+                        <a href="{{ url_for('user_profile') }}">Profile</a>
+                    {% endif %}
+                    <a href="{{ url_for('logout') }}" class="btn-logout">Logout</a>
+                {% else %}
+                    <a href="{{ url_for('index') }}">Home</a>
+                    <a href="{{ url_for('login') }}">Login</a>
+                    <a href="{{ url_for('register') }}" class="btn-register">Register</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <!-- Main Content -->
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3><i class="fas fa-coffee"></i> Coffee Shop</h3>
+                    <p>Brewing happiness since 2024</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact Us</h4>
+                    <p><i class="fas fa-envelope"></i> info@coffeeshop.com</p>
+                    <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Hours</h4>
+                    <p>Mon-Fri: 7am - 9pm</p>
+                    <p>Sat-Sun: 8am - 10pm</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Coffee Shop. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

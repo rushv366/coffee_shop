@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+
+{% block title %}Shopping Cart - Coffee Shop{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+    <div class="dashboard-header">
+        <h1>Shopping Cart</h1>
+        <a href="{{ url_for('user_menu') }}" class="btn-primary">
+            <i class="fas fa-arrow-left"></i> Continue Shopping
+        </a>
+    </div>
+
+    {% if cart_items %}
+    <div class="cart-container">
+        <div class="cart-items">
+            {% for item in cart_items %}
+            <div class="cart-item" data-coffee-id="{{ item.id }}">
+                <div class="item-info">
+                    <h3>{{ item.name }}</h3>
+                    <p>Price: ${{ "%.2f"|format(item.price) }}</p>
+                </div>
+                
+                <div class="quantity-control">
+                    <button class="quantity-btn quantity-minus" data-coffee-id="{{ item.id }}">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                    <input type="number" class="quantity-input" 
+                           value="{{ item.quantity }}" min="1" 
+                           data-coffee-id="{{ item.id }}">
+                    <button class="quantity-btn quantity-plus" data-coffee-id="{{ item.id }}">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+                
+                <div class="item-total">
+                    ${{ "%.2f"|format(item.total) }}
+                </div>
+                
+                <button class="remove-from-cart" data-coffee-id="{{ item.id }}">
+                    <i class="fas fa-trash"></i> Remove
+                </button>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="cart-total">
+            <h3>Total: ${{ "%.2f"|format(total) }}</h3>
+            <a href="{{ url_for('checkout') }}" class="btn-submit" style="margin-top: 20px;">
+                Proceed to Checkout
+            </a>
+        </div>
+    </div>
+    {% else %}
+    <div class="empty-cart">
+        <i class="fas fa-shopping-cart fa-3x"></i>
+        <h2>Your cart is empty</h2>
+        <p>Add some delicious coffee to your cart!</p>
+        <a href="{{ url_for('user_menu') }}" class="btn-primary">
+            Browse Menu
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Cart quantity controls
+    document.querySelectorAll('.quantity-minus').forEach(button => {
+        button.addEventListener('click', function() {
+            const coffeeId = this.dataset.coffeeId;
+            const input = document.querySelector(`.quantity-input[data-coffee-id="${coffeeId}"]`);
+            let quantity = parseInt(input.value);
+            
+            if (quantity > 1) {
+                quantity--;
+                input.value = quantity;
+                updateCartItem(coffeeId, quantity);
+            }
+        });
+    });
+    
+    document.querySelectorAll('.quantity-plus').forEach(button => {
+        button.addEventListener('click', function() {
+            const coffeeId = this.dataset.coffeeId;
+            const input = document.querySelector(`.quantity-input[data-coffee-id="${coffeeId}"]`);
+            let quantity = parseInt(input.value);
+            quantity++;
+            input.value = quantity;
+            updateCartItem(coffeeId, quantity);
+        });
+    });
+    
+    document.querySelectorAll('.quantity-input').forEach(input => {
+        input.addEventListener('change', function() {
+            const coffeeId = this.dataset.coffeeId;
+            const quantity = parseInt(this.value);
+            
+            if (quantity >= 1) {
+                updateCartItem(coffeeId, quantity);
+            } else {
+                this.value = 1;
+            }
+        });
+    });
+    
+    document.querySelectorAll('.remove-from-cart').forEach(button => {
+        button.addEventListener('click', function() {
+            const coffeeId = this.dataset.coffeeId;
+            removeFromCart(coffeeId);
+        });
+    });
+    
+    async function updateCartItem(coffeeId, quantity) {
+        try {
+            const response = await fetch('/api/cart/update', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ coffee_id: coffeeId, quantity: quantity })
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                // Update cart count in navbar
+                const cartCount = document.querySelector('.cart-count');
+                if (cartCount) {
+                    cartCount.textContent = data.cart_count;
+                }
+                
+                // Update total
+                const cartTotal = document.querySelector('.cart-total h3');
+                if (cartTotal) {
+                    cartTotal.textContent = `Total: ${data.total}`;
+                }
+                
+                // If quantity is 0, remove the item from DOM
+                if (quantity <= 0) {
+                    const cartItem = document.querySelector(`[data-coffee-id="${coffeeId}"]`);
+                    if (cartItem) {
+                        cartItem.remove();
+                    }
+                }
+            }
+        } catch (error) {
+            console.error('Error updating cart:', error);
+            showNotification('Failed to update cart', 'error');
+        }
+    }
+    
+    async function removeFromCart(coffeeId) {
+        try {
+            const response = await fetch(`/api/cart/remove/${coffeeId}`, {
+                method: 'DELETE'
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                // Update cart count
+                const cartCount = document.querySelector('.cart-count');
+                if (cartCount) {
+                    cartCount.textContent = data.cart_count;
+                }
+                
+                // Remove item from DOM
+                const cartItem = document.querySelector(`[data-coffee-id="${coffeeId}"]`);
+                if (cartItem) {
+                    cartItem.remove();
+                }
+                
+                showNotification(data.message, 'success');
+            }
+        } catch (error) {
+            console.error('Error removing from cart:', error);
+            showNotification('Failed to remove item from cart', 'error');
+        }
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}Order Details - Coffee Shop{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+    <div class="dashboard-header">
+        <h1>Order Details #{{ order.id }}</h1>
+        <a href="{{ url_for('admin_orders') }}" class="btn-primary">
+            <i class="fas fa-arrow-left"></i> Back to Orders
+        </a>
+    </div>
+
+    <div class="order-details">
+        <div class="order-info">
+            <h2>Order Information</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <strong>Order ID:</strong> #{{ order.id }}
+                </div>
+                <div class="info-item">
+                    <strong>Customer:</strong> {{ order.first_name }} {{ order.last_name }}
+                </div>
+                <div class="info-item">
+                    <strong>Email:</strong> {{ order.email }}
+                </div>
+                <div class="info-item">
+                    <strong>Contact:</strong> {{ order.contact_number }}
+                </div>
+                <div class="info-item">
+                    <strong>Order Date:</strong> {{ order.created_at }}
+                </div>
+                <div class="info-item">
+                    <strong>Total Amount:</strong> ${{ "%.2f"|format(order.total_amount) }}
+                </div>
+                <div class="info-item">
+                    <strong>Current Status:</strong>
+                    <span class="status-badge status-{{ order.status }}">
+                        {{ order.status|title }}
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="order-items">
+            <h2>Order Items</h2>
+            {% if items %}
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Coffee</th>
+                            <th>Description</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in items %}
+                        <tr>
+                            <td>{{ item[0] }}</td>
+                            <td>{{ item[1] }}</td>
+                            <td>{{ item[2] }}</td>
+                            <td>${{ "%.2f"|format(item[3]) }}</td>
+                            <td>${{ "%.2f"|format(item[2] * item[3]) }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <p>No items found for this order.</p>
+            {% endif %}
+        </div>
+
+        <div class="status-update">
+            <h2>Update Order Status</h2>
+            <form method="POST" action="{{ url_for('update_order_status', order_id=order.id) }}">
+                <div class="form-group">
+                    <select name="status" class="form-control" required>
+                        <option value="pending" {% if order.status == 'pending' %}selected{% endif %}>Pending</option>
+                        <option value="preparing" {% if order.status == 'preparing' %}selected{% endif %}>Preparing</option>
+                        <option value="ready" {% if order.status == 'ready' %}selected{% endif %}>Ready</option>
+                        <option value="completed" {% if order.status == 'completed' %}selected{% endif %}>Completed</option>
+                        <option value="cancelled" {% if order.status == 'cancelled' %}selected{% endif %}>Cancelled</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-submit">Update Status</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

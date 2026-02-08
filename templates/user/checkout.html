@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Checkout - Coffee Shop{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+    <div class="dashboard-header">
+        <h1>Checkout</h1>
+        <a href="{{ url_for('user_cart') }}" class="btn-primary">
+            <i class="fas fa-arrow-left"></i> Back to Cart
+        </a>
+    </div>
+
+    <div class="checkout-container">
+        <div class="order-summary">
+            <h2>Order Summary</h2>
+            {% for item in cart_items %}
+            <div class="checkout-item">
+                <span>{{ item.name }} x {{ item.quantity }}</span>
+                <span>${{ "%.2f"|format(item.total) }}</span>
+            </div>
+            {% endfor %}
+            
+            <div class="checkout-total">
+                <strong>Total:</strong>
+                <strong>${{ "%.2f"|format(total) }}</strong>
+            </div>
+        </div>
+
+        <div class="checkout-form">
+            <h2>Place Order</h2>
+            <form method="POST" action="{{ url_for('checkout') }}">
+                <div class="form-group">
+                    <label>Customer Information</label>
+                    <div class="customer-info">
+                        <p><strong>Name:</strong> {{ session.first_name }} {{ session.last_name }}</p>
+                        <p><strong>Email:</strong> {{ session.email }}</p>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="notes">Order Notes (Optional)</label>
+                    <textarea id="notes" name="notes" class="form-control" rows="3" 
+                              placeholder="Any special instructions for your order..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" name="terms" required>
+                        I agree to the terms and conditions
+                    </label>
+                </div>
+                
+                <button type="submit" class="btn-submit">
+                    <i class="fas fa-check"></i> Place Order
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Server Error - Coffee Shop{% endblock %}
+
+{% block content %}
+<div class="error-container">
+    <div class="error-content">
+        <i class="fas fa-exclamation-triangle fa-5x"></i>
+        <h1>500 - Server Error</h1>
+        <p>Something went wrong on our end. Our baristas are working hard to fix it!</p>
+        <a href="{{ url_for('index') }}" class="btn-primary">
+            <i class="fas fa-home"></i> Back to Home
+        </a>
+    </div>
+</div>
+{% endblock %}

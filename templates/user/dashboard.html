@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Coffee Shop{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+    <div class="dashboard-header">
+        <h1>Welcome, {{ session.first_name }}!</h1>
+        <a href="{{ url_for('user_menu') }}" class="btn-primary">Order Now</a>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h3>{{ total_orders }}</h3>
+            <p>Total Orders</p>
+        </div>
+        
+        <div class="stat-card">
+            <h3>${{ "%.2f"|format(total_spent) }}</h3>
+            <p>Total Spent</p>
+        </div>
+        
+        <div class="stat-card">
+            <h3>
+                {% if session.cart %}
+                    {{ session.cart.values()|sum }}
+                {% else %}
+                    0
+                {% endif %}
+            </h3>
+            <p>Items in Cart</p>
+        </div>
+    </div>
+
+    <div class="quick-actions">
+        <h2>Quick Actions</h2>
+        <div class="action-buttons">
+            <a href="{{ url_for('user_menu') }}" class="btn-primary">
+                <i class="fas fa-coffee"></i> Browse Menu
+            </a>
+            <a href="{{ url_for('user_cart') }}" class="btn-primary">
+                <i class="fas fa-shopping-cart"></i> View Cart
+            </a>
+            <a href="{{ url_for('user_orders') }}" class="btn-primary">
+                <i class="fas fa-history"></i> Order History
+            </a>
+            <a href="{{ url_for('user_profile') }}" class="btn-primary">
+                <i class="fas fa-user"></i> My Profile
+            </a>
+        </div>
+    </div>
+
+    {% if recent_orders %}
+    <div class="recent-orders">
+        <h2>Recent Orders</h2>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in recent_orders %}
+                    <tr>
+                        <td>#{{ order.id }}</td>
+                        <td>${{ "%.2f"|format(order.total_amount) }}</td>
+                        <td>
+                            <span class="status-badge status-{{ order.status }}">
+                                {{ order.status|title }}
+                            </span>
+                        </td>
+                        <td>{{ order.created_at }}</td>
+                        <td>
+                            <a href="{{ url_for('user_orders') }}" class="btn-action btn-view">
+                                View
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <a href="{{ url_for('user_orders') }}" class="btn-primary" style="margin-top: 20px;">
+            View All Orders
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}My Orders - Coffee Shop{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+    <div class="dashboard-header">
+        <h1>My Orders</h1>
+        <a href="{{ url_for('user_menu') }}" class="btn-primary">
+            <i class="fas fa-plus"></i> New Order
+        </a>
+    </div>
+
+    {% if order_details %}
+    <div class="orders-list">
+        {% for order_detail in order_details %}
+        <div class="order-card">
+            <div class="order-header">
+                <div>
+                    <h3>Order #{{ order_detail.order.id }}</h3>
+                    <p>Date: {{ order_detail.order.created_at }}</p>
+                </div>
+                <div class="order-status">
+                    <span class="status-badge status-{{ order_detail.order.status }}">
+                        {{ order_detail.order.status|title }}
+                    </span>
+                    <strong>${{ "%.2f"|format(order_detail.order.total_amount) }}</strong>
+                </div>
+            </div>
+            
+            <div class="order-items">
+                <h4>Items:</h4>
+                <ul>
+                    {% for item in order_detail.items %}
+                    <li>{{ item[0] }} x{{ item[1] }} - ${{ "%.2f"|format(item[2]) }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            
+            {% if order_detail.order.status == 'pending' %}
+            <div class="order-actions">
+                <button class="btn-action btn-cancel">Cancel Order</button>
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-orders">
+        <i class="fas fa-history fa-3x"></i>
+        <h2>No orders yet</h2>
+        <p>Place your first order and start your coffee journey!</p>
+        <a href="{{ url_for('user_menu') }}" class="btn-primary">
+            Browse Menu
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
